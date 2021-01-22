@@ -1,12 +1,13 @@
 import { Component } from "react";
 import "./App.css";
-import Questions from "./components/Questions";
-import Button1 from './components/Button';
+//import Questions from "./components/Questions";
+//import Button1 from './components/Button';
+import Game from './containers/game/game';
 class App extends Component {
 
   state = {
-        totalQuestions: 0,
-        currentQuestion: 'what time is it?'
+        totalQuestions: 0,  // this will be passed on to question counter
+        currentQuestion: 'what time is it?'  // displayed in question window
      };
    
 
@@ -22,18 +23,9 @@ changeText = () => {
  
   render() {
     return (
-      <div className="App">
-        <div className="Questions">
+      <div>
 
-                    <Questions changeText = {this.changeText}>
-                     <p> {this.state.currentQuestion} </p>
-                      </Questions>
-               
-                    <Button1 className="Button"></Button1>
-                    <Button1 className="Button"></Button1>
-                    <Button1 ></Button1>
-                    <Button1 click ={this.totalCounter} ></Button1>
-        </div>
+        <Game></Game>
         
        </div>
     );
