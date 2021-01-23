@@ -1,0 +1,16 @@
+.main {
+    background-color: #fffeee;
+    flex-basis: 100%;
+    text-align: center;
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -20px
+}
+
+.game-question {
+  font-size: large;
+  font-family: 'Courier New', Courier, monospace;
+
+}

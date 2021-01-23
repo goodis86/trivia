@@ -1,0 +1,21 @@
+.score {
+    flex-basis: 100%;
+    text-align: center;
+    padding: 20px;
+    color: orange;
+    font-size: 20px;
+}
+
+.game-stats {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat_wrong {
+        color: black;
+}
+
+.stat_right {
+  color: black;
+}

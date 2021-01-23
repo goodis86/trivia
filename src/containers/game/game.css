@@ -22,72 +22,12 @@
 		z-index: 2;
 	}
 	
-	.score {
-		flex-basis: 100%;
-		text-align: center;
-		padding: 20px;
-		color: orange;
-		font-size: 20px;
-	}
 	
-	.game-stats {
-		flex-basis: 100%;
-		display: flex;
-		justify-content: space-around;
-	}
-	
-	.stat_wrong {
-			color: black;
-    }
-    
-    .stat_right {
-      color: black;
-    }
-	
-	
-	.main {
-		background-color: #fffeee;
-		flex-basis: 100%;
-		text-align: center;
-		min-height: 250px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin-top: -20px
-  }
-  
-  .game-question {
-      font-size: large;
-      font-family: 'Courier New', Courier, monospace;
-   
-  }
-	
-	.answers {
-		min-height: 200px;
-		flex-basis: 100%;
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		background-color: #fffccc;
-	}
-	
-	.answer {
-		flex-basis: 35%;
-		min-height: 50px;
-		text-align: center;
-		background-color: #cccddd;
-		margin: 0 15px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 12px;
-	}
 	
 	.timer{
 		width: 100%;
 		min-height: 30px;
-		/* background-color: rgb(255,0,14); */
+		text-align: center;
 		background-image: linear-gradient(
             90deg,#cc0707 0%,#707719 15%,#00ff2e 100%);
 	}
