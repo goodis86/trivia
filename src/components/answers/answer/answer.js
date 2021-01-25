@@ -4,7 +4,7 @@ import React from "react";
 const answer = (props) => {
   return (
     
-    <p className="answer">{props.versi}</p>
+    <button className="answer" onClick={props.clicked}>{props.versi}</button>
   );
 };
 

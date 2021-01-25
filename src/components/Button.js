@@ -9,7 +9,7 @@ const button1 = (props) => {
   //   }
 
   return (
-    <button className="Button" onClick={props.click} color='white'>
+    <button className="Button" onClick={props.click} color='white' show={props.show}>
       {/* {"answer"} */}load questions
     </button>
   );
