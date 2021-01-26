@@ -7,11 +7,11 @@ const scores = (props) => {
     <div className='header'>
     
         
-      <div className="score">Score: -4</div>
+      <div className="score">Score: {props.correctStats}</div>
       <div className="game-stats">
-        <p className="stat_right"> Corrects: 0</p>
-        <p className="stat_wrong"> Wrongs: 0</p>
-        <p className="stat_skip"> Skiped: 0</p>
+        <p className="stat_right"> Corrects: {props.correctStats}</p>
+        <p className="stat_wrong"> Wrongs: {props.incorrectStats}</p>
+        <p className="stat_skip"> Skiped: {props.skipped}</p>
       </div>
     
      </div>

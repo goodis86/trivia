@@ -1,99 +1,118 @@
 import React, { Component } from "react";
+import axios from "axios";
+
 import "./game.css";
 import Scores from "../../components/scores/scores";
 import MainQ from "../../components/mainQ/mainQ";
-import axios from "axios";
-import Answer from "../../components/answers/answer/answer";
-import "../../components/answers/answers.css";
+import Answer from "../../components/answer/answer";
 import Button from "../../components/Button";
+
 class Game extends Component {
   state = {
     dataPackage: null,
-    currentQuestion: 'whats going on bud',
-    correctAnswer: 'lets do this',
-    incorrectAnswers: [],
     fetched: false,
-    dataIndex: 0
+    
+    currentQuestion: "whats going on bud",
+    incorrectAnswers: [],
+    correctAnswer: "",
+    
+    dataIndex: 0,
+    correctStats: 0,
+    incorrectStats: 0,
+    skipped: 0,
+    
+    showResults: false,
   };
 
-  
-  
-  showQuestion = () => {
-   
-    this.setState({
-      currentQuestion: this.state.dataPackage[this.state.dataIndex].question,
-      correctAnswer: this.state.dataPackage[this.state.dataIndex].correct_answer,
-      incorrectAnswers: this.state.dataPackage[this.state.dataIndex].incorrect_answers,
-      dataIndex: this.state.dataIndex + 1
-    });
-      
-      console.log('show question runs');
-  }
-  
-  fetchData = () => {
-    
+  compareAnswer = (answer) => {                      // method that updates our scoreboard!!!
+    if (answer === this.state.correctAnswer) {
+      this.setState({
+        correctStats: this.state.correctStats + 1,
+      });
+    } else {
+      this.setState({ incorrectStats: this.state.incorrectStats + 1 });
+    }
+  };
+
+  showQuestion = () => {                // loads next question
+    if (this.state.dataIndex < this.state.dataPackage.length) {  // check if we are within our question array
+      this.setState({
+        currentQuestion: this.state.dataPackage[this.state.dataIndex].question,
+        correctAnswer: this.state.dataPackage[this.state.dataIndex]
+          .correct_answer,
+        incorrectAnswers: this.state.dataPackage[this.state.dataIndex]
+          .incorrect_answers,
+        dataIndex: this.state.dataIndex + 1,
+      });
+      console.log("show question runs");
+    } else {
+      this.setState({ showResults: true });
+    }
+  };
+
+  fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
     let urlAPI =
       "https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple";
     // 'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=boolean';
 
     axios.get(urlAPI).then((response) => {
-      this.setState({ dataPackage: response.data.results,
-        // correctAnswer: response.data.results[0].correct_answer,
-        // incorrectAnswers: response.data.results[0].incorrect_answers,
-        // currentQuestion: response.data.results[0].question,
-
+      this.setState({
+        dataPackage: response.data.results,
         fetched: true,
       });
-      // console.log(response.data);
-      console.log(this.state.dataPackage);
-      console.log('fetchData method ran')
+      console.log("fetchData method ran");
       this.showQuestion();
-
     });
   };
 
   render() {
-    let options = null;
-    let answers = this.state.incorrectAnswers
+    let answers = this.state.incorrectAnswers // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
 
-    if (this.state.incorrectAnswers !== []) {    // check if this is legitimate
+    let options = null;
+    if (this.state.incorrectAnswers.length > 0) {      // answer buttons rendering on screen!!
       options = answers.map((answer) => {
-        return <Answer 
-        key={answer} 
-        versi={answer}
-        clicked = {this.showQuestion}></Answer>;
+        return (
+          <Answer
+            key={answer}
+            versi={answer}
+            clicked={() => {
+              this.compareAnswer(answer); // on click we call compareAnswer method to change scores!
+              this.showQuestion(); // initiate next question and move on!
+            }}
+          ></Answer>
+        );
       });
     }
 
-    let loadButton = <div/>;
+    let loadButton = <div />; // load questions button rendering and logic!
     if (!this.state.fetched) {
-      loadButton =  <Button 
-      click={this.fetchData} 
-     />
+      loadButton = <Button click={this.fetchData} />;
+    }
+
+    let mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
+    if (!this.state.showResults) {
+      mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />;
+    } else {
+      options = null; // don't render my answer options when game over
     }
 
     return (
       <section className="trivia-game">
         <div className="container">
           <div className="header">
-            <Scores></Scores>
+            <Scores
+              correctStats={this.state.correctStats}
+              incorrectStats={this.state.incorrectStats}
+            ></Scores>
           </div>
+          {mainQuestion}
 
-          <MainQ currentQuestion={this.state.currentQuestion} />
           <div className="answers">
             {options}
-            {/* {correctAnswer} */}
-            {console.log(answers)}
-            {/* <Answer versi = {this.state.correctAnswer} /> */}
-            {console.log(this.state.correctAnswer)}
-
-            {/* {console.log("in my return ")} */}
-            {/* <Answer versi={this.state.incorrectAnswers[0]} /> */}
-            {/* <Answer c={this.state.correctAnswer} /> */}
+            {console.log(this.state.correctAnswer)}  
           </div>
-         
           {loadButton}
           <div className="timer">timer in process ...</div>
         </div>

@@ -1,18 +1,10 @@
 import React from "react";
 import "../App.css";
 
-const button1 = (props) => {
-  // buttonHandler = (props) => {
-  //     console.log('method runs');
-  //     // comparison of our answer and correct answer
-  //     // somehow we have to update our counters and
-  //   }
-
+const button = (props) => {
   return (
-    <button className="Button" onClick={props.click} color='white' show={props.show}>
-      {/* {"answer"} */}load questions
-    </button>
+    <button className="Button" onClick={props.click} color="white"> LOAD QUESTIONS </button>
   );
 };
 
-export default button1;
+export default button;
