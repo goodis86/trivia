@@ -105,6 +105,7 @@ class Game extends Component {
             <Scores
               correctStats={this.state.correctStats}
               incorrectStats={this.state.incorrectStats}
+              skipped={this.state.skipped}
             ></Scores>
           </div>
           {mainQuestion}
