@@ -91,6 +91,12 @@ class Game extends Component {
       loadButton = <Button click={this.fetchData} />;
     }
     
+// need to create a component for options and styling for them
+// create logic to construct our api url and dynamically inject that in our fetch request
+// create a clean up function
+// make sure no infinite loops, minimize resource potential
+// optimize overall logic and performance (do better if checks, get rid of redundant renders...!)
+
    let mainQuestion;
     if (!this.state.dataPackage) {   // rendering select menu before populating the state!
       mainQuestion = <MainQ currentQuestion={
