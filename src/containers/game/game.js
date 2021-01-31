@@ -12,7 +12,7 @@ class Game extends Component {
     dataPackage: null,
     fetched: false,
     
-    currentQuestion: "whats going on bud",
+    currentQuestion: null,
     incorrectAnswers: [],
     correctAnswer: "",
     
@@ -69,9 +69,9 @@ class Game extends Component {
     let answers = this.state.incorrectAnswers // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
-
+    
     let options = null;
-    if (this.state.incorrectAnswers.length > 0) {      // answer buttons rendering on screen!!
+    if (this.state.currentQuestion) {      // answer buttons rendering on screen!!
       options = answers.map((answer) => {
         return (
           <Answer
@@ -84,19 +84,31 @@ class Game extends Component {
           ></Answer>
         );
       });
-    }
+    } 
 
     let loadButton = <div />; // load questions button rendering and logic!
     if (!this.state.fetched) {
       loadButton = <Button click={this.fetchData} />;
     }
+    
+   let mainQuestion;
+    if (!this.state.dataPackage) {   // rendering select menu before populating the state!
+      mainQuestion = <MainQ currentQuestion={
+        <form className="answers">
+         <input value="select category"></input>
+         <input value="select difficulty"></input>
+         <input value="select type"></input>
+         <input value="select # of questions"></input>
+        </form>}/>;
+     }
+    else {
+      mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />; // if we do have a datapackage - show current question
 
-    let mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
-    if (!this.state.showResults) {
-      mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />;
-    } else {
-      options = null; // don't render my answer options when game over
     }
+    if (this.state.showResults) {
+      mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
+      options = null; // don't render my answer options when game over
+    } 
 
     return (
       <section className="trivia-game">
