@@ -6,9 +6,15 @@ import Scores from "../../components/scores/scores";
 import MainQ from "../../components/mainQ/mainQ";
 import Answer from "../../components/answer/answer";
 import Button from "../../components/Button";
+import QuestionMenu from '../../components/questionMenu/questionMenu';
 
 class Game extends Component {
   state = {
+    category: null,
+    difficulty: null,
+    questionAmount: null,
+    gameType: null,
+    
     dataPackage: null,
     fetched: false,
     
@@ -50,11 +56,38 @@ class Game extends Component {
     }
   };
 
-  fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
-    let urlAPI =
-      "https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple";
-    // 'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=boolean';
+  urlCategory = (event) => {
+    console.log(event.target.value);
+    this.setState({category: event.target.value});
+ 
+    console.log(this.state.category);
+}
+  urlDifficulty = (event) => {
+    console.log(event.target.value);
+    this.setState({difficulty: event.target.value});
+  // let url = `https://opentdb.com/api.php?amount=${event.target.value}&category=${9}&difficulty=${easy}&type=${multiple}`
+    console.log(this.state.category);
+}
+  urlQuestionAmount = (event) => {
+    console.log(event.target.value);
+    this.setState({questionAmount: event.target.value});
+  // let url = `https://opentdb.com/api.php?amount=${event.target.value}&category=${9}&difficulty=${easy}&type=${multiple}`
+    console.log(this.state.category);
+}
+  urlGameType = (event) => {
+    console.log(event.target.value);
+    this.setState({gameType: event.target.value});
+  // let url = `https://opentdb.com/api.php?amount=${event.target.value}&category=${9}&difficulty=${easy}&type=${multiple}`
+    console.log(this.state.category);
+}
 
+  fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
+    let urlAPI = `https://opentdb.com/api.php?
+    amount=${this.state.questionAmount}&
+    category=${this.state.category}&
+    difficulty=${this.state.difficulty}&
+    type=${this.state.gameType}`
+   
     axios.get(urlAPI).then((response) => {
       this.setState({
         dataPackage: response.data.results,
@@ -99,14 +132,12 @@ class Game extends Component {
 
    let mainQuestion;
     if (!this.state.dataPackage) {   // rendering select menu before populating the state!
-      mainQuestion = <MainQ currentQuestion={
-        <form className="answers">
-         <input value="select category"></input>
-         <input value="select difficulty"></input>
-         <input value="select type"></input>
-         <input value="select # of questions"></input>
-        </form>}/>;
-     }
+      mainQuestion = <QuestionMenu 
+      category = {this.urlCategory}
+      gameType = {this.urlGameType}
+      questionAmount = {this.urlQuestionAmount}
+      difficulty = {this.urlDifficulty}></QuestionMenu>}
+      
     else {
       mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />; // if we do have a datapackage - show current question
 
