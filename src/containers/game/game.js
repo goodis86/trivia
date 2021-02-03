@@ -24,12 +24,14 @@ class Game extends Component {
     incorrectStats: 0,
     skipped: 0,
     
-    showResults: false,
+    gameOver: false,
   };
-
+/// HAVE TO MAKE SURE I MAKE MY DYNAMICAL RUL BUILD WORK CLEANER!!
+// TRY TO RECEIVE STATE FROM CHILD COMPONENT TO BUILD MY FETCH METHOD!
+// OR I CAN BUILD MY URL IN MY CHILD COMPONENT QUESTIONMENU AND PASS IT ON HERE!
   fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
-    let urlAPI = `https://opentdb.com/api.php?
-    amount=${this.state.questionAmount}&
+    let urlAPI = `https://opentdb.com/api.php?    
+    amount=${this.state.questionAmount}&      
     category=${this.state.category}&
     difficulty=${this.state.difficulty}&
     type=${this.state.gameType}`
@@ -56,7 +58,7 @@ class Game extends Component {
       });
       console.log("show question runs");
     } else {
-      this.setState({ showResults: true });
+      this.setState({ gameOver: true });
     }
   }
 
@@ -106,15 +108,14 @@ class Game extends Component {
 // make sure no infinite loops, minimize resource potential
 // optimize overall logic and performance (do better if checks, get rid of redundant renders...!)
 
-   let mainQuestion;
-    if (!this.state.dataPackage) {   // rendering select menu before populating the state!
-      mainQuestion = <QuestionMenu /> }
-      
-    else {
+   let mainQuestion = <QuestionMenu />
+
+   if (this.state.dataPackage) {   // rendering select menu before populating the state!
+      // mainQuestion = <QuestionMenu /> }
       mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />; // if we do have a datapackage - show current question
     }
 
-    if (this.state.showResults) {
+    if (this.state.gameOver) {
       mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
       options = null; // don't render my answer options when game over
     } 
