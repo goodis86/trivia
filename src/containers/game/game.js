@@ -10,10 +10,7 @@ import QuestionMenu from '../../components/questionMenu/questionMenu';
 
 class Game extends Component {
   state = {
-    category: null,
-    difficulty: null,
-    questionAmount: null,
-    gameType: null,
+   
     
     dataPackage: null,
     fetched: false,
@@ -30,57 +27,6 @@ class Game extends Component {
     showResults: false,
   };
 
-  compareAnswer = (answer) => {                      // method that updates our scoreboard!!!
-    if (answer === this.state.correctAnswer) {
-      this.setState({
-        correctStats: this.state.correctStats + 1,
-      });
-    } else {
-      this.setState({ incorrectStats: this.state.incorrectStats + 1 });
-    }
-  };
-
-  showQuestion = () => {                // loads next question
-    if (this.state.dataIndex < this.state.dataPackage.length) {  // check if we are within our question array
-      this.setState({
-        currentQuestion: this.state.dataPackage[this.state.dataIndex].question,
-        correctAnswer: this.state.dataPackage[this.state.dataIndex]
-          .correct_answer,
-        incorrectAnswers: this.state.dataPackage[this.state.dataIndex]
-          .incorrect_answers,
-        dataIndex: this.state.dataIndex + 1,
-      });
-      console.log("show question runs");
-    } else {
-      this.setState({ showResults: true });
-    }
-  };
-
-  urlCategory = (event) => {
-    console.log(event.target.value);
-    this.setState({category: event.target.value});
- 
-    console.log(this.state.category);
-}
-  urlDifficulty = (event) => {
-    console.log(event.target.value);
-    this.setState({difficulty: event.target.value});
-  // let url = `https://opentdb.com/api.php?amount=${event.target.value}&category=${9}&difficulty=${easy}&type=${multiple}`
-    console.log(this.state.category);
-}
-  urlQuestionAmount = (event) => {
-    console.log(event.target.value);
-    this.setState({questionAmount: event.target.value});
-  // let url = `https://opentdb.com/api.php?amount=${event.target.value}&category=${9}&difficulty=${easy}&type=${multiple}`
-    console.log(this.state.category);
-}
-  urlGameType = (event) => {
-    console.log(event.target.value);
-    this.setState({gameType: event.target.value});
-  // let url = `https://opentdb.com/api.php?amount=${event.target.value}&category=${9}&difficulty=${easy}&type=${multiple}`
-    console.log(this.state.category);
-}
-
   fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
     let urlAPI = `https://opentdb.com/api.php?
     amount=${this.state.questionAmount}&
@@ -96,7 +42,37 @@ class Game extends Component {
       console.log("fetchData method ran");
       this.showQuestion();
     });
+  }
+
+  showQuestion = () => {                // loads next question
+    if (this.state.dataIndex < this.state.dataPackage.length) {  // check if we are within our question array
+      this.setState({
+        currentQuestion: this.state.dataPackage[this.state.dataIndex].question,
+        correctAnswer: this.state.dataPackage[this.state.dataIndex]
+          .correct_answer,
+        incorrectAnswers: this.state.dataPackage[this.state.dataIndex]
+          .incorrect_answers,
+        dataIndex: this.state.dataIndex + 1,
+      });
+      console.log("show question runs");
+    } else {
+      this.setState({ showResults: true });
+    }
+  }
+
+  compareAnswer = (answer) => {                      // method that updates our scoreboard!!!
+    if (answer === this.state.correctAnswer) {
+      this.setState({
+        correctStats: this.state.correctStats + 1,
+      });
+    } else {
+      this.setState({ incorrectStats: this.state.incorrectStats + 1 });
+    }
   };
+
+
+ 
+
 
   render() {
     let answers = this.state.incorrectAnswers // array of shuffled answers
@@ -124,30 +100,28 @@ class Game extends Component {
       loadButton = <Button click={this.fetchData} />;
     }
     
-// need to create a component for options and styling for them
-// create logic to construct our api url and dynamically inject that in our fetch request
+
+
 // create a clean up function
 // make sure no infinite loops, minimize resource potential
 // optimize overall logic and performance (do better if checks, get rid of redundant renders...!)
 
    let mainQuestion;
     if (!this.state.dataPackage) {   // rendering select menu before populating the state!
-      mainQuestion = <QuestionMenu 
-      category = {this.urlCategory}
-      gameType = {this.urlGameType}
-      questionAmount = {this.urlQuestionAmount}
-      difficulty = {this.urlDifficulty}></QuestionMenu>}
+      mainQuestion = <QuestionMenu /> }
       
     else {
       mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />; // if we do have a datapackage - show current question
-
     }
+
     if (this.state.showResults) {
       mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
       options = null; // don't render my answer options when game over
     } 
 
     return (
+
+      // i can use an higher order component here to wrap my adjacent elements and give the whole game styling at the same time!!!!
       <section className="trivia-game">
         <div className="container">
           <div className="header">

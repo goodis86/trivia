@@ -1,5 +1,6 @@
 import { Component } from "react";
 import "./App.css";
+import Layout from "./components/Layout/layout";
 
 import Game from "./containers/game/game";
 
@@ -8,9 +9,11 @@ class App extends Component {
     return (
       console.log("app.js mounted"),
       (
-        <div>
-          <Game></Game>
-        </div>
+        <Layout>
+          <Game>
+            
+          </Game>
+          </Layout>
       )
     );
   }
