@@ -8,10 +8,14 @@ import Answer from "../../components/answer/answer";
 import Button from "../../components/Button";
 import QuestionMenu from '../../components/questionMenu/questionMenu';
 
+
+   
+// let urlApi = null;
+
 class Game extends Component {
   state = {
    
-    
+    apiUrl: null,
     dataPackage: null,
     fetched: false,
     
@@ -29,14 +33,10 @@ class Game extends Component {
 /// HAVE TO MAKE SURE I MAKE MY DYNAMICAL RUL BUILD WORK CLEANER!!
 // TRY TO RECEIVE STATE FROM CHILD COMPONENT TO BUILD MY FETCH METHOD!
 // OR I CAN BUILD MY URL IN MY CHILD COMPONENT QUESTIONMENU AND PASS IT ON HERE!
-  fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
-    let urlAPI = `https://opentdb.com/api.php?    
-    amount=${this.state.questionAmount}&      
-    category=${this.state.category}&
-    difficulty=${this.state.difficulty}&
-    type=${this.state.gameType}`
+  fetchData = (data) => {    // runs only once!! on the button click LOAD QUESTIONS
+  
    
-    axios.get(urlAPI).then((response) => {
+    axios.get(data).then((response) => {
       this.setState({
         dataPackage: response.data.results,
         fetched: true,
@@ -72,9 +72,18 @@ class Game extends Component {
     }
   };
 
-
- 
-
+  onTrigger = (event) => {
+    console.log(event);
+  //  this.fetchData(event);        // this triggers our fetchdata method right away!! we need to figure out how can we pass data from 1 method to another!!!
+    // event.preventDefault();
+  }
+  // handleCallback = (childData) =>{
+  //   this.setState({apiUrl: childData})
+  // }
+//   handleCallback = (childData) =>{
+//     this.setState({apiUrl: childData})
+//     console.log(this.state.apiUrl);
+// }
 
   render() {
     let answers = this.state.incorrectAnswers // array of shuffled answers
@@ -99,7 +108,7 @@ class Game extends Component {
 
     let loadButton = <div />; // load questions button rendering and logic!
     if (!this.state.fetched) {
-      loadButton = <Button click={this.fetchData} />;
+      loadButton = <Button click = {this.fetchData} />;
     }
     
 
@@ -108,7 +117,7 @@ class Game extends Component {
 // make sure no infinite loops, minimize resource potential
 // optimize overall logic and performance (do better if checks, get rid of redundant renders...!)
 
-   let mainQuestion = <QuestionMenu />
+   let mainQuestion = <QuestionMenu onChange = {this.onTrigger}/>      // props onChange triggers our child component logic!!!!
 
    if (this.state.dataPackage) {   // rendering select menu before populating the state!
       // mainQuestion = <QuestionMenu /> }
@@ -133,7 +142,7 @@ class Game extends Component {
             ></Scores>
           </div>
           {mainQuestion}
-
+        {this.state.apiUrl}
           <div className="answers">
             {options}
             {console.log(this.state.correctAnswer)}  
