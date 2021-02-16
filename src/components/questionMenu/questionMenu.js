@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import "./questionMenu.css";
 import "../../components/mainQ/mainQ.css";
 
+// import Button from "../../components/Button";
+
 // this component rerenders and shows us our option chosen!!
 // it does not trigger rerender of our game component!!!!
 
-// will need to take care of dynamically building our URL API>>
+
 
 const category = [
   {
@@ -84,35 +86,47 @@ class QuestionMenu extends Component {
   constructor(props) {
     super(props);
   this.state = {
-    apiUrl: '',
-    category: "null",
-    difficulty: "null",
-    questionAmount: "null",
-    gameType: "null",
+    apiUrl: null,
+    category: null,
+    difficulty: null,
+    questionAmount: null,
+    gameType: null,
   };
  
   this.handleChange = this.handleChange.bind(this);
 }
 
 componentDidUpdate() {            // only runs when component updates, not initial render!!!!
-  if (this.props.onChange) {      // if we have onChange props on our child component that renders in parent component , then we pass in to our props dynamically build apiurl!!!!
-    this.props.onChange(`https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`);
-  }
+  // if (this.props.onChange) {      // if we have onChange props on our child component that renders in parent component , then we pass in to our props dynamically build apiurl!!!!
+  //   this.props.onChange(`https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`);
+  // }
 }
   handleChange(event) {
                                                         // implemented our method to alter needed state props depending on type of select items!!!!!
-  
-    // console.log(this.state.category);
     this.setState({ [event.target.name]: event.target.value });
-    // console.log("event value is " + event.target.value);
-    
   }
-  
+  // actualCall() {
+  //   if (this.state.apiUrl)
+  //   this.props.onChange(this.state.apiUrl)
+  // }
+
+  // passOnChangeToParent(data) {
+  //   if(this.state.apiUrl !== data)
+  //   {
+  //   this.setState({apiUrl: data});
+  //   this.actualCall();
+  //   }
+  // }
 
   render() {
     let apiUrl = `https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`;
     console.log("question menu is rendering...");
     // console.log(apiUrl);
+    
+    let loadButton = <div />; // load questions button rendering and logic!
+    if (this.state.category && this.state.questionAmount && this.state.difficulty && this.state.gameType) {
+      loadButton = <button onClick = {() => this.props.onChange(apiUrl)} />;
+    }
     return (
       <div className="main">
      
@@ -160,7 +174,8 @@ componentDidUpdate() {            // only runs when component updates, not initi
               </option>
             ))}
           </select>
-          {apiUrl}
+          {/* {apiUrl} */}
+          {loadButton}
         </form>
 
      

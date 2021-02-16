@@ -5,19 +5,20 @@ import "./game.css";
 import Scores from "../../components/scores/scores";
 import MainQ from "../../components/mainQ/mainQ";
 import Answer from "../../components/answer/answer";
-import Button from "../../components/Button";
-import QuestionMenu from '../../components/questionMenu/questionMenu';
 
+import QuestionMenu from '../../components/questionMenu/questionMenu';
+// import Timer from '../../components/Timer/timer';
 
    
-// let urlApi = null;
+
 
 class Game extends Component {
   state = {
    
     apiUrl: null,
+
     dataPackage: null,
-    fetched: false,
+    // fetched: false,
     
     currentQuestion: null,
     incorrectAnswers: [],
@@ -33,10 +34,10 @@ class Game extends Component {
 /// HAVE TO MAKE SURE I MAKE MY DYNAMICAL RUL BUILD WORK CLEANER!!
 // TRY TO RECEIVE STATE FROM CHILD COMPONENT TO BUILD MY FETCH METHOD!
 // OR I CAN BUILD MY URL IN MY CHILD COMPONENT QUESTIONMENU AND PASS IT ON HERE!
-  fetchData = (data) => {    // runs only once!! on the button click LOAD QUESTIONS
+  fetchData = (event) => {    // runs only once!! on the button click LOAD QUESTIONS
   
    
-    axios.get(data).then((response) => {
+    axios.get(event).then((response) => {
       this.setState({
         dataPackage: response.data.results,
         fetched: true,
@@ -73,19 +74,16 @@ class Game extends Component {
   };
 
   onTrigger = (event) => {
-    console.log(event);
-  //  this.fetchData(event);        // this triggers our fetchdata method right away!! we need to figure out how can we pass data from 1 method to another!!!
-    // event.preventDefault();
+    // console.log(event);
+    if(this.state.apiUrl === null)
+    this.setState({apiUrl: event});
+    // this.fetchData();
+    console.log(this.state.apiUrl);
   }
-  // handleCallback = (childData) =>{
-  //   this.setState({apiUrl: childData})
-  // }
-//   handleCallback = (childData) =>{
-//     this.setState({apiUrl: childData})
-//     console.log(this.state.apiUrl);
-// }
 
   render() {
+    console.log('redering game component');
+    // console.log(this.state.apiUrl);
     let answers = this.state.incorrectAnswers // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
@@ -106,10 +104,7 @@ class Game extends Component {
       });
     } 
 
-    let loadButton = <div />; // load questions button rendering and logic!
-    if (!this.state.fetched) {
-      loadButton = <Button click = {this.fetchData} />;
-    }
+  
     
 
 
@@ -117,7 +112,7 @@ class Game extends Component {
 // make sure no infinite loops, minimize resource potential
 // optimize overall logic and performance (do better if checks, get rid of redundant renders...!)
 
-   let mainQuestion = <QuestionMenu onChange = {this.onTrigger}/>      // props onChange triggers our child component logic!!!!
+   let mainQuestion = <QuestionMenu onChange = {this.fetchData}/>      // props onChange triggers our child component logic!!!!
 
    if (this.state.dataPackage) {   // rendering select menu before populating the state!
       // mainQuestion = <QuestionMenu /> }
@@ -142,13 +137,14 @@ class Game extends Component {
             ></Scores>
           </div>
           {mainQuestion}
-        {this.state.apiUrl}
+        {/* {this.state.apiUrl} */}
           <div className="answers">
             {options}
-            {console.log(this.state.correctAnswer)}  
+            {/* {console.log(this.state.correctAnswer)}   */}
+          {/* <Timer /> */}
+
           </div>
-          {loadButton}
-          <div className="timer">timer in process ...</div>
+          {/* {loadButton} */}
         </div>
       </section>
     );
