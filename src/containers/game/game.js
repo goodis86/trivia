@@ -86,10 +86,6 @@ this.setState({apiUrl: event});
   }
 
   render() {
-    // console.log('redering game component');
-  
-
-    // console.log(this.state.apiUrl);
     let answers = this.state.incorrectAnswers // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
@@ -109,35 +105,17 @@ this.setState({apiUrl: event});
         );
       });
     } 
-
-  
-    
-
-
-// create a clean up function
-// make sure no infinite loops, minimize resource potential
-// optimize overall logic and performance (do better if checks, get rid of redundant renders...!)
-
 console.log('[Game] state apiURl is ' + this.state.apiUrl);
-// if (this.state.apiUrl && this.state.fetched===false) {
-//   this.fetchData(this.state.apiUrl);
-// }
-
    let mainQuestion = <QuestionMenu onChange = {this.onTrigger.bind(this)}/>      // props onChange triggers our child component logic!!!!
 
    if (this.state.dataPackage) {   // rendering select menu before populating the state!
-      // mainQuestion = <QuestionMenu /> }
       mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />; // if we do have a datapackage - show current question
     }
-
     if (this.state.gameOver) {
       mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
       options = null; // don't render my answer options when game over
     } 
-
     return (
-
-      // i can use an higher order component here to wrap my adjacent elements and give the whole game styling at the same time!!!!
       <section className="trivia-game">
         <div className="container">
           <div className="header">

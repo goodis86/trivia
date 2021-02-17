@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import "./questionMenu.css";
 import "../../components/mainQ/mainQ.css";
 
-// import Button from "../../components/Button";
+
+import Button from "../../components/Button";
 
 // this component rerenders and shows us our option chosen!!
 // it does not trigger rerender of our game component!!!!
@@ -116,7 +117,7 @@ class QuestionMenu extends Component {
     
     let loadButton = <div />; // load questions button rendering and logic!
     if (this.state.category && this.state.questionAmount && this.state.difficulty && this.state.gameType) {
-      loadButton = <button onClick = {this.dynamicUrl} />;
+      loadButton = <Button click = {this.dynamicUrl} />;
     }
     return (
       <div className="main">
