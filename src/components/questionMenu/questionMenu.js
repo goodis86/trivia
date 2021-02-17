@@ -94,12 +94,12 @@ class QuestionMenu extends Component {
     gameType: null,
   };
  
-  this.handleChange = this.handleChange.bind(this);
+  this.userChoiseHandler = this.userChoiseHandler.bind(this);
   this.dynamicUrl = this.dynamicUrl.bind(this);
 }
 
 
-  handleChange(event) {
+  userChoiseHandler(event) {
     this.setState({ [event.target.name]: event.target.value });     // implemented our method to alter needed state props depending on type of select items!!!!!
     // console.log(this.state)
   }
@@ -112,10 +112,9 @@ class QuestionMenu extends Component {
  }
 
   render() {
-    // console.log("question menu is rendering...");
-    // console.log(apiUrl);
-    
+    console.log('[child component rendered]');
     let loadButton = <div />; // load questions button rendering and logic!
+   
     if (this.state.category && this.state.questionAmount && this.state.difficulty && this.state.gameType) {
       loadButton = <Button click = {this.dynamicUrl} />;
     }
@@ -126,7 +125,7 @@ class QuestionMenu extends Component {
         <form className="game-question">
 
       {/* each select gets onChange prop and name prop to manipulate and update data in our state and use only 1 method to update state!!!!! */}
-          <select onChange={this.handleChange} name = 'category'>         
+          <select onChange={this.userChoiseHandler} name = 'category'>         
             {category.map((option) => (                               // mapping through our arrays and rendering options!
               <option                                 // our options dont  change, therefore we cant have onChange here, it will never be triggered!!!!
                 key={option.label}
@@ -136,7 +135,7 @@ class QuestionMenu extends Component {
               </option>
             ))}
           </select>
-          <select onChange={this.handleChange} name = 'difficulty'>
+          <select onChange={this.userChoiseHandler} name = 'difficulty'>
             {difficultyLevel.map((option) => (
               <option
                 key={option.label}
@@ -146,7 +145,7 @@ class QuestionMenu extends Component {
               </option>
             ))}
           </select>
-          <select onChange={this.handleChange} name = 'questionAmount'>
+          <select onChange={this.userChoiseHandler} name = 'questionAmount'>
             {questionAmount.map((option) => (
               <option
                 key={option.label}
@@ -156,7 +155,7 @@ class QuestionMenu extends Component {
               </option>
             ))}
           </select>
-          <select onChange={this.handleChange} name = 'gameType'>
+          <select onChange={this.userChoiseHandler} name = 'gameType'>
             {gameType.map((option) => (
               <option
                 key={option.label}

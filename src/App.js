@@ -6,7 +6,7 @@ import Game from "./containers/game/game";
 
 class App extends Component {
   render() {
-    console.log('app js mounted in render method')
+    console.log('[APP component] rendered ');
     return (
       // console.log("app.js mounted in return"),
       (

@@ -32,24 +32,13 @@ class Game extends Component {
     gameOver: false,
   };
 
-  
-componentDidUpdate() {
-  if(this.state.apiUrl && this.state.fetched === false) {
-    this.fetchData();
- 
-}
-}
-
 fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
   
-    console.log('[Game] fetchData method received url: ' + this.state.apiUrl);
      axios.get(this.state.apiUrl).then((response) => {
-      console.log('[Game] fetchdata before setState , datapackage' + response.data.results)
       this.setState({
         dataPackage: response.data.results,
         fetched: true,
       });
-      console.log("[Game] fetchData method ran");
       this.showQuestion();
     });
   }
@@ -64,7 +53,6 @@ fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
           .incorrect_answers,
         dataIndex: this.state.dataIndex + 1,
       });
-      console.log("[Game] show question runs");
     } else {
       this.setState({ gameOver: true });
     }
@@ -80,12 +68,19 @@ fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
     }
   };
 
-  onTrigger = (event) => {
-console.log('[Game] onTrigger runs')   ;
+  onTrigger = (event) => {     // call this method more logically for ease of reading
 this.setState({apiUrl: event});
   }
 
   render() {
+    console.log('[GAME COMPONENT] render method ran!!');
+
+    if(this.state.apiUrl && this.state.fetched === false) {
+      this.fetchData();
+      return <div>Loading...</div>
+  }
+
+
     let answers = this.state.incorrectAnswers // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
@@ -105,8 +100,8 @@ this.setState({apiUrl: event});
         );
       });
     } 
-console.log('[Game] state apiURl is ' + this.state.apiUrl);
-   let mainQuestion = <QuestionMenu onChange = {this.onTrigger.bind(this)}/>      // props onChange triggers our child component logic!!!!
+
+    let mainQuestion = <QuestionMenu onChange = {this.onTrigger.bind(this)}/>      // props onChange triggers our child component logic!!!!
 
    if (this.state.dataPackage) {   // rendering select menu before populating the state!
       mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />; // if we do have a datapackage - show current question
@@ -126,14 +121,10 @@ console.log('[Game] state apiURl is ' + this.state.apiUrl);
             ></Scores>
           </div>
           {mainQuestion}
-        {/* {this.state.apiUrl} */}
           <div className="answers">
             {options}
-            {/* {console.log(this.state.correctAnswer)}   */}
           {/* <Timer /> */}
-
           </div>
-          {/* {loadButton} */}
         </div>
       </section>
     );
