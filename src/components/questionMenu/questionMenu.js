@@ -86,7 +86,7 @@ class QuestionMenu extends Component {
   constructor(props) {
     super(props);
   this.state = {
-    apiUrl: null,
+    apiUrl: '',
     category: null,
     difficulty: null,
     questionAmount: null,
@@ -94,38 +94,29 @@ class QuestionMenu extends Component {
   };
  
   this.handleChange = this.handleChange.bind(this);
+  this.dynamicUrl = this.dynamicUrl.bind(this);
 }
 
-componentDidUpdate() {            // only runs when component updates, not initial render!!!!
-  // if (this.props.onChange) {      // if we have onChange props on our child component that renders in parent component , then we pass in to our props dynamically build apiurl!!!!
-  //   this.props.onChange(`https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`);
-  // }
-}
+
   handleChange(event) {
-                                                        // implemented our method to alter needed state props depending on type of select items!!!!!
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });     // implemented our method to alter needed state props depending on type of select items!!!!!
+    // console.log(this.state)
   }
-  // actualCall() {
-  //   if (this.state.apiUrl)
-  //   this.props.onChange(this.state.apiUrl)
-  // }
-
-  // passOnChangeToParent(data) {
-  //   if(this.state.apiUrl !== data)
-  //   {
-  //   this.setState({apiUrl: data});
-  //   this.actualCall();
-  //   }
-  // }
+ dynamicUrl() {
+  //  console.log(event);
+  let apiUrl = `https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`;
+  //https://opentdb.com/api.php?amount=10&category=11&difficulty=easy&type=multiple
+ console.log('[child] dynamic url is created:' + apiUrl);
+   this.props.onChange(apiUrl)
+ }
 
   render() {
-    let apiUrl = `https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`;
-    console.log("question menu is rendering...");
+    // console.log("question menu is rendering...");
     // console.log(apiUrl);
     
     let loadButton = <div />; // load questions button rendering and logic!
     if (this.state.category && this.state.questionAmount && this.state.difficulty && this.state.gameType) {
-      loadButton = <button onClick = {() => this.props.onChange(apiUrl)} />;
+      loadButton = <button onClick = {this.dynamicUrl} />;
     }
     return (
       <div className="main">

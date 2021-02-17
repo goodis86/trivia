@@ -8,7 +8,7 @@ class App extends Component {
   render() {
     console.log('app js mounted in render method')
     return (
-      console.log("app.js mounted in return"),
+      // console.log("app.js mounted in return"),
       (
         <Layout>
           <Game>

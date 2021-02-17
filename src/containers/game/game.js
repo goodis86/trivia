@@ -18,7 +18,7 @@ class Game extends Component {
     apiUrl: null,
 
     dataPackage: null,
-    // fetched: false,
+    fetched: false,
     
     currentQuestion: null,
     incorrectAnswers: [],
@@ -31,18 +31,25 @@ class Game extends Component {
     
     gameOver: false,
   };
-/// HAVE TO MAKE SURE I MAKE MY DYNAMICAL RUL BUILD WORK CLEANER!!
-// TRY TO RECEIVE STATE FROM CHILD COMPONENT TO BUILD MY FETCH METHOD!
-// OR I CAN BUILD MY URL IN MY CHILD COMPONENT QUESTIONMENU AND PASS IT ON HERE!
-  fetchData = (event) => {    // runs only once!! on the button click LOAD QUESTIONS
+
   
-   
-    axios.get(event).then((response) => {
+componentDidUpdate() {
+  if(this.state.apiUrl && this.state.fetched === false) {
+    this.fetchData();
+ 
+}
+}
+
+fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
+  
+    console.log('[Game] fetchData method received url: ' + this.state.apiUrl);
+     axios.get(this.state.apiUrl).then((response) => {
+      console.log('[Game] fetchdata before setState , datapackage' + response.data.results)
       this.setState({
         dataPackage: response.data.results,
         fetched: true,
       });
-      console.log("fetchData method ran");
+      console.log("[Game] fetchData method ran");
       this.showQuestion();
     });
   }
@@ -57,7 +64,7 @@ class Game extends Component {
           .incorrect_answers,
         dataIndex: this.state.dataIndex + 1,
       });
-      console.log("show question runs");
+      console.log("[Game] show question runs");
     } else {
       this.setState({ gameOver: true });
     }
@@ -74,15 +81,14 @@ class Game extends Component {
   };
 
   onTrigger = (event) => {
-    // console.log(event);
-    if(this.state.apiUrl === null)
-    this.setState({apiUrl: event});
-    // this.fetchData();
-    console.log(this.state.apiUrl);
+console.log('[Game] onTrigger runs')   ;
+this.setState({apiUrl: event});
   }
 
   render() {
-    console.log('redering game component');
+    // console.log('redering game component');
+  
+
     // console.log(this.state.apiUrl);
     let answers = this.state.incorrectAnswers // array of shuffled answers
       .concat(this.state.correctAnswer)
@@ -112,7 +118,12 @@ class Game extends Component {
 // make sure no infinite loops, minimize resource potential
 // optimize overall logic and performance (do better if checks, get rid of redundant renders...!)
 
-   let mainQuestion = <QuestionMenu onChange = {this.fetchData}/>      // props onChange triggers our child component logic!!!!
+console.log('[Game] state apiURl is ' + this.state.apiUrl);
+// if (this.state.apiUrl && this.state.fetched===false) {
+//   this.fetchData(this.state.apiUrl);
+// }
+
+   let mainQuestion = <QuestionMenu onChange = {this.onTrigger.bind(this)}/>      // props onChange triggers our child component logic!!!!
 
    if (this.state.dataPackage) {   // rendering select menu before populating the state!
       // mainQuestion = <QuestionMenu /> }
