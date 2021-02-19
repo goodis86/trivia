@@ -7,7 +7,9 @@ import MainQ from "../../components/mainQ/mainQ";
 import Answer from "../../components/answer/answer";
 
 import QuestionMenu from '../../components/questionMenu/questionMenu';
-// import Timer from '../../components/Timer/timer';
+import Spinner from '../../components/Spinner/Spinner';
+
+import Timer from '../../components/Timer/timer';
 
    
 
@@ -33,11 +35,11 @@ class Game extends Component {
   };
 
 fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
-  
      axios.get(this.state.apiUrl).then((response) => {
       this.setState({
         dataPackage: response.data.results,
         fetched: true,
+        apiUrl: 'something'
       });
       this.showQuestion();
     });
@@ -59,7 +61,12 @@ fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
   }
 
   compareAnswer = (answer) => {                      // method that updates our scoreboard!!!
-    if (answer === this.state.correctAnswer) {
+    
+    if (answer === 'null') {        // we pass 'null' if our timer runs out of time!
+      this.setState({
+        skipped: this.state.skipped + 1
+      })
+    } else if (answer === this.state.correctAnswer) {
       this.setState({
         correctStats: this.state.correctStats + 1,
       });
@@ -69,36 +76,46 @@ fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
   };
 
   onTrigger = (event) => {     // call this method more logically for ease of reading
-this.setState({apiUrl: event});
+this.setState({apiUrl: event});   
   }
-
+ 
   render() {
     console.log('[GAME COMPONENT] render method ran!!');
 
     if(this.state.apiUrl && this.state.fetched === false) {
       this.fetchData();
-      return <div>Loading...</div>
+      return <Spinner/>         // SHOW SPINNER IF LOADING!
   }
-
-
+    
+   
     let answers = this.state.incorrectAnswers // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
-    
+    let timer = <div/>;
     let options = null;
     if (this.state.currentQuestion) {      // answer buttons rendering on screen!!
       options = answers.map((answer) => {
         return (
-          <Answer
-            key={answer}
-            versi={answer}
-            clicked={() => {
-              this.compareAnswer(answer); // on click we call compareAnswer method to change scores!
-              this.showQuestion(); // initiate next question and move on!
-            }}
-          ></Answer>
+
+            <Answer
+              key={answer}
+              versi={answer}
+              clicked={() => {
+                this.compareAnswer(answer); // on click we call compareAnswer method to change scores!
+                this.showQuestion(); // initiate next question and move on!
+              }}
+            ></Answer>
+        
         );
       });
+      
+     timer = <Timer 
+              onTimeOut = {() => {            // OUR PROPS RECEIVE ONtimeOUT AND WE TRIGGER OUR METHODS HERE !
+                console.log('[ontimeOut prop executes]')
+              this.compareAnswer('null');
+              // this.setState({skipped: this.state.skipped +1}) ;
+              this.showQuestion()
+    }}/>       // i have my timer going only when currentQuestion has a value !!!!
     } 
 
     let mainQuestion = <QuestionMenu onChange = {this.onTrigger.bind(this)}/>      // props onChange triggers our child component logic!!!!
@@ -109,6 +126,7 @@ this.setState({apiUrl: event});
     if (this.state.gameOver) {
       mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
       options = null; // don't render my answer options when game over
+      timer = <div/>      // don't show timer if game over!
     } 
     return (
       <section className="trivia-game">
@@ -123,7 +141,7 @@ this.setState({apiUrl: event});
           {mainQuestion}
           <div className="answers">
             {options}
-          {/* <Timer /> */}
+        {timer}
           </div>
         </div>
       </section>

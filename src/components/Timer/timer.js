@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 
 export default class Timer extends Component {
-    state = {
+    constructor(props) {
+        super(props);
+    this.state = {
         minutes: 0,
-        seconds: 5,
+        seconds: 10,
     }
-
+    this.trigger = this.trigger.bind(this);
+    }
     componentDidMount() {
         this.myInterval = setInterval(() => {
             const { seconds, minutes } = this.state
@@ -28,17 +31,30 @@ export default class Timer extends Component {
         }, 1000)
     }
 
-    componentWillUnmount() {
+    componentWillUnmount() {                            // TIMER DOESN'T RESET WHEN I CLICK ONE OF THE ANSWERS!!! NEED TO FIX IT AND TAKE CARE OF ERRORS IN CONSOLE!
         clearInterval(this.myInterval)
     }
 
+    componentDidUpdate () {
+        // this.props.onTimeOut();
+    }
+
+    trigger() {
+        this.setState({seconds: 10})
+        this.props.onTimeOut();                 // populate our props and trigger methods in game component!
+    }
+
     render() {
+
         console.log(this.state);
-        const { minutes, seconds } = this.state
+        const { minutes, seconds } = this.state;
+        if (minutes === 0 && seconds === 0) {
+           this.trigger();
+        }
         return (
             <div>
                 { minutes === 0 && seconds === 0
-                    ? <h1>Busted!</h1>                              // return value to our parent component , run compareAnswer and nextQuesiton methods, reset timer !!!
+                    ? <h1>busted</h1>                        
                     : <h1>Time Remaining: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</h1>
                 }
             </div>
