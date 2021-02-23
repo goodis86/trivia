@@ -2,13 +2,10 @@ import React, { Component } from "react";
 import "./questionMenu.css";
 import "../../components/mainQ/mainQ.css";
 
-
 import Button from "../../components/Button";
 
-// this component rerenders and shows us our option chosen!!
-// it does not trigger rerender of our game component!!!!
-
-
+                                                                        // this component rerenders and shows us our option chosen!!
+                                                                        // it does not trigger rerender of our game component!!!!
 
 const category = [
   {
@@ -81,95 +78,79 @@ const difficultyLevel = [
   },
 ];
 
-// console.log(this.state.apiUrl);
-
 class QuestionMenu extends Component {
   constructor(props) {
     super(props);
-  this.state = {
-    apiUrl: '',
-    category: null,
-    difficulty: null,
-    questionAmount: null,
-    gameType: null,
-  };
- 
-  this.userChoiseHandler = this.userChoiseHandler.bind(this);
-  this.dynamicUrl = this.dynamicUrl.bind(this);
-}
+    this.state = {
+      apiUrl: "",
+      category: null,
+      difficulty: null,
+      questionAmount: null,
+      gameType: null,
+    };
 
+    this.userChoiseHandler = this.userChoiseHandler.bind(this);
+    this.dynamicUrl = this.dynamicUrl.bind(this);
+  }
 
   userChoiseHandler(event) {
-    this.setState({ [event.target.name]: event.target.value });     // implemented our method to alter needed state props depending on type of select items!!!!!
-    // console.log(this.state)
+    this.setState({ [event.target.name]: event.target.value });                   // implemented our method to alter needed state values depending on type of select items!!!!!
   }
- dynamicUrl() {
-  //  console.log(event);
-  let apiUrl = `https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`;
-  //https://opentdb.com/api.php?amount=10&category=11&difficulty=easy&type=multiple
- console.log('[child] dynamic url is created:' + apiUrl);
-   this.props.onChange(apiUrl)
- }
+  dynamicUrl() {
+    console.log("[CHILD] QuestionMenu - dynamic url is created:");
+    let apiUrl = `https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`;
+    this.props.onChange(apiUrl);                                                // onChange prop is initiated and passes our dynamically created url to our parent through props!!!!
+  }
 
   render() {
-    console.log('[child component rendered]');
-    let loadButton = <div />; // load questions button rendering and logic!
-   
-    if (this.state.category && this.state.questionAmount && this.state.difficulty && this.state.gameType) {
-      loadButton = <Button click = {this.dynamicUrl} />;
+    console.log("[CHILD] QuestionMenu rendered");
+    let loadButton = <div />;                                               // load questions button rendering and logic!
+
+    if (
+      this.state.category &&
+      this.state.questionAmount &&
+      this.state.difficulty &&
+      this.state.gameType
+    ) {
+      loadButton = <Button click={this.dynamicUrl} />;                      // run dynamicUrl method on our button click! - which passes our url to parent right away!
     }
+
     return (
       <div className="main">
-     
-
         <form className="game-question">
-
-      {/* each select gets onChange prop and name prop to manipulate and update data in our state and use only 1 method to update state!!!!! */}
-          <select onChange={this.userChoiseHandler} name = 'category'>         
-            {category.map((option) => (                               // mapping through our arrays and rendering options!
-              <option                                 // our options dont  change, therefore we cant have onChange here, it will never be triggered!!!!
-                key={option.label}
-                value={option.value}
-              >
+                                                                       {/* each select gets onChange prop and name prop to manipulate and update data in our state*/}
+          <select onChange={this.userChoiseHandler} name="category">    {/*and use only 1 method to update state*/}
+            {category.map((
+              option                                                                // mapping through our arrays and rendering options!
+            ) => (
+              <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select onChange={this.userChoiseHandler} name = 'difficulty'>
+          <select onChange={this.userChoiseHandler} name="difficulty">
             {difficultyLevel.map((option) => (
-              <option
-                key={option.label}
-                value={option.value}
-              >
+              <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select onChange={this.userChoiseHandler} name = 'questionAmount'>
+          <select onChange={this.userChoiseHandler} name="questionAmount">
             {questionAmount.map((option) => (
-              <option
-                key={option.label}
-                value={option.value}
-              >
+              <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select onChange={this.userChoiseHandler} name = 'gameType'>
+          <select onChange={this.userChoiseHandler} name="gameType">
             {gameType.map((option) => (
-              <option
-                key={option.label}
-                value={option.value}
-              >
+              <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          {/* {apiUrl} */}
           {loadButton}
         </form>
-
-     
       </div>
     );
   }

@@ -6,47 +6,46 @@ import Scores from "../../components/scores/scores";
 import MainQ from "../../components/mainQ/mainQ";
 import Answer from "../../components/answer/answer";
 
-import QuestionMenu from '../../components/questionMenu/questionMenu';
-import Spinner from '../../components/Spinner/Spinner';
+import QuestionMenu from "../../components/questionMenu/questionMenu";
+import Spinner from "../../components/Spinner/Spinner";
 
-import Timer from '../../components/Timer/timer';
-
-   
-
+import Timer from "../../components/Timer/timer";
 
 class Game extends Component {
   state = {
-   
     apiUrl: null,
 
     dataPackage: null,
+    dataIndex: 0,
     fetched: false,
-    
+
     currentQuestion: null,
     incorrectAnswers: [],
     correctAnswer: "",
-    
-    dataIndex: 0,
+
     correctStats: 0,
     incorrectStats: 0,
     skipped: 0,
-    
+
     gameOver: false,
   };
 
-fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
-     axios.get(this.state.apiUrl).then((response) => {
+  fetchData = () => {                                                    // runs only once!! on the button click LOAD QUESTIONS
+    console.log("[PARENT] fetchData method ran");
+    axios.get(this.state.apiUrl).then((response) => {
       this.setState({
         dataPackage: response.data.results,
         fetched: true,
-        apiUrl: 'something'
+        apiUrl: "something",
       });
       this.showQuestion();
     });
-  }
+  };
 
-  showQuestion = () => {                // loads next question
-    if (this.state.dataIndex < this.state.dataPackage.length) {  // check if we are within our question array
+  showQuestion = () => {
+    console.log("[PARENT] showQuestion method ran");
+
+    if (this.state.dataIndex < this.state.dataPackage.length) {                           // check if we are within our question array
       this.setState({
         currentQuestion: this.state.dataPackage[this.state.dataIndex].question,
         correctAnswer: this.state.dataPackage[this.state.dataIndex]
@@ -58,14 +57,16 @@ fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
     } else {
       this.setState({ gameOver: true });
     }
-  }
+  };
 
-  compareAnswer = (answer) => {                      // method that updates our scoreboard!!!
-    
-    if (answer === 'null') {        // we pass 'null' if our timer runs out of time!
+  compareAnswer = (answer) => {
+    console.log("[PARENT] compareAnswer ran");                                    // method that updates our scoreboard!!!
+
+    if (answer === "null") {
+                                                                // we pass 'null' if our timer runs out of time and increment skipped value
       this.setState({
-        skipped: this.state.skipped + 1
-      })
+        skipped: this.state.skipped + 1,
+      });
     } else if (answer === this.state.correctAnswer) {
       this.setState({
         correctStats: this.state.correctStats + 1,
@@ -75,59 +76,64 @@ fetchData = () => {    // runs only once!! on the button click LOAD QUESTIONS
     }
   };
 
-  onTrigger = (event) => {     // call this method more logically for ease of reading
-this.setState({apiUrl: event});   
-  }
- 
-  render() {
-    console.log('[GAME COMPONENT] render method ran!!');
+  dynamicUrlHandler = (event) => {                                  // updates our apiUrl in our parent's state!
+    this.setState({ apiUrl: event });
+  };
 
-    if(this.state.apiUrl && this.state.fetched === false) {
+  render() {
+    console.log("[PARENT] rendered");
+
+    if (this.state.apiUrl && this.state.fetched === false) {
       this.fetchData();
-      return <Spinner/>         // SHOW SPINNER IF LOADING!
-  }
-    
-   
-    let answers = this.state.incorrectAnswers // array of shuffled answers
+      return <Spinner />;                                         // SHOW SPINNER IF LOADING!
+    }
+
+    let answers = this.state.incorrectAnswers                     // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
-    let timer = <div/>;
+    let timer = <div />;
     let options = null;
-    if (this.state.currentQuestion) {      // answer buttons rendering on screen!!
+    if (this.state.currentQuestion) {
+                                                                // answer buttons rendering on screen!!
       options = answers.map((answer) => {
         return (
-
-            <Answer
-              key={answer}
-              versi={answer}
-              clicked={() => {
-                this.compareAnswer(answer); // on click we call compareAnswer method to change scores!
-                this.showQuestion(); // initiate next question and move on!
-              }}
-            ></Answer>
-        
+          <Answer
+            key={answer}
+            versi={answer}
+            clicked={() => {
+              console.log("[PARENT] clicked props at work");
+              this.compareAnswer(answer);                               // on click we call compareAnswer method to change scores!
+              this.showQuestion();                                      // initiate next question and move on!
+            }}
+          ></Answer>
         );
       });
-      
-     timer = <Timer 
-              onTimeOut = {() => {            // OUR PROPS RECEIVE ONtimeOUT AND WE TRIGGER OUR METHODS HERE !
-                console.log('[ontimeOut prop executes]')
-              this.compareAnswer('null');
-              // this.setState({skipped: this.state.skipped +1}) ;
-              this.showQuestion()
-    }}/>       // i have my timer going only when currentQuestion has a value !!!!
-    } 
 
-    let mainQuestion = <QuestionMenu onChange = {this.onTrigger.bind(this)}/>      // props onChange triggers our child component logic!!!!
+      timer = (
+        <Timer
+          onTimeOut={() => {                                                  // OUR ONTIMEOUT PROPS ARE RECEIVED FROM CHILD AND WE TRIGGER OUR METHODS HERE !
+            console.log("[CHILD] Timer ontimeOut prop initiated]");
+            this.compareAnswer("null");
+            this.showQuestion();
+          }}
+          timerReset={this.state.dataIndex}                   // we set our props to dataIndex(changes with every question), allows us to avoid infinite loop in timer component!
+        />
+      ); 
+    }
 
-   if (this.state.dataPackage) {   // rendering select menu before populating the state!
-      mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />; // if we do have a datapackage - show current question
+    let mainQuestion = (                                                      // rendering questionMenu before populating the state!
+      <QuestionMenu onChange={this.dynamicUrlHandler.bind(this)} />       // props onChange triggers our child component logic!!!!
+    ); 
+
+    if (this.state.dataPackage) {
+                                                                                   
+      mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />;        // if we do have a datapackage - show current question
     }
     if (this.state.gameOver) {
-      mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>; // main question render logic
-      options = null; // don't render my answer options when game over
-      timer = <div/>      // don't show timer if game over!
-    } 
+      mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>;                   // if game over - WE CAN ANIMATE OUR RESULTS! - DO SOME VISUAL AIDS!
+      options = null;                                                               // don't render my answer options when game over
+      timer = <div />;                                                              // don't show timer if game over!
+    }
     return (
       <section className="trivia-game">
         <div className="container">
@@ -141,7 +147,7 @@ this.setState({apiUrl: event});
           {mainQuestion}
           <div className="answers">
             {options}
-        {timer}
+            {timer}
           </div>
         </div>
       </section>
