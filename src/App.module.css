@@ -7,6 +7,18 @@
   display: flex;
 }
 
+.Body {
+  margin: 300;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: red;
+}
+
+
+
 .App-header {
   background-color: #282c34;
   color: rgb(250, 243, 243);

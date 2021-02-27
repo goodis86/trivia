@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import styles from "./game.module.css";
 import "./game.css";
+
 import Scores from "../../components/scores/scores";
 import MainQ from "../../components/mainQ/mainQ";
 import Answer from "../../components/answer/answer";
@@ -129,23 +131,35 @@ class Game extends Component {
                                                                                    
       mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />;        // if we do have a datapackage - show current question
     }
-    if (this.state.gameOver) {
-      mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>;                   // if game over - WE CAN ANIMATE OUR RESULTS! - DO SOME VISUAL AIDS!
-      options = null;                                                               // don't render my answer options when game over
-      timer = <div />;                                                              // don't show timer if game over!
-    }
+
+    // {this.state.gameOver ? styles.header.headerGameOver : styles.header}
+     // conditional application of our styles to score block!
+    let scores =  <div className='header' >   
+    <Scores
+      correctStats={this.state.correctStats}
+      incorrectStats={this.state.incorrectStats}
+      skipped={this.state.skipped}
+      ></Scores>
+  </div>
+
+      if (this.state.gameOver) {
+        mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>;                   // if game over - WE CAN ANIMATE OUR RESULTS! - DO SOME VISUAL AIDS!
+        options = null;                                                               // don't render my answer options when game over
+        timer = <div />;                                                              // don't show timer if game over!
+        scores = <div className='header headerGameOver'>
+        <Scores
+          correctStats={this.state.correctStats}
+          incorrectStats={this.state.incorrectStats}
+          skipped={this.state.skipped}
+          ></Scores>
+      </div>
+      }
     return (
-      <section className="trivia-game">
-        <div className="container">
-          <div className="header">
-            <Scores
-              correctStats={this.state.correctStats}
-              incorrectStats={this.state.incorrectStats}
-              skipped={this.state.skipped}
-            ></Scores>
-          </div>
+      <section className={styles.triviaGame}>
+        <div className={styles.container}>
+        {scores}
           {mainQuestion}
-          <div className="answers">
+          <div className={styles.answers}>
             {options}
             {timer}
           </div>

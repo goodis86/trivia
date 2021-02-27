@@ -1,9 +1,9 @@
 import React from "react";
-import "../App.css";
+import styles from "../App.module.css";
 
 const button = (props) => {
   return (
-    <button className="Button" onClick={props.click} color="white"> LOAD QUESTIONS </button>
+    <button className={styles.Button} onClick={props.click} color="white"> LOAD QUESTIONS </button>
   );
 };
 

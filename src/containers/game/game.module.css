@@ -1,0 +1,84 @@
+.triviaGame {
+  background-color: #0070c0;
+  min-height: 100vh;
+  /* transition: all 400ms ease-in; */
+}
+
+.container {
+  position: relative;
+  width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* transition: all 400ms ease-in; */
+}
+
+.header {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: #6497b1;
+  border-radius: 0px 0px 20px 20px;
+  z-index: 2;
+  transition: transform 0.5s ease-in;
+
+}
+  /* .header:hover {
+  transform: translateY(200px)
+    
+  }
+  */
+
+ .header.headerGameOver {
+  border-radius: 20px;
+  transform: translateY(200px); 
+}
+.answers {
+  min-height: 200px;
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: #fffccc;
+}
+
+.timer {
+  width: 100%;
+  min-height: 30px;
+  text-align: center;
+  background-image: linear-gradient(
+    90deg,
+    #cc0707 0%,
+    #707719 15%,
+    #00ff2e 100%
+  );
+}
+
+.score {
+  flex-basis: 100%;
+  text-align: center;
+  padding: 20px;
+  color: orange;
+  font-size: 20px;
+}
+
+.gameStats {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.stat_wrong {
+  color: black;
+}
+
+.stat_right {
+  color: black;
+}
+
+.stat_skip {
+  color: black;
+}

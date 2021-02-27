@@ -8,4 +8,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
+  transition: transform 0.8s;
+}
+.answer:hover {
+  transform: scale(1.2);
 }
