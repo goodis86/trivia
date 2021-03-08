@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+// import iconv from 'iconv-lite';
 
 import styles from "./game.module.css";
 import "./game.css";
@@ -12,6 +13,8 @@ import QuestionMenu from "../../components/questionMenu/questionMenu";
 import Spinner from "../../components/Spinner/Spinner";
 
 import Timer from "../../components/Timer/timer";
+
+
 
 class Game extends Component {
   state = {
@@ -35,6 +38,7 @@ class Game extends Component {
   fetchData = () => {                                                    // runs only once!! on the button click LOAD QUESTIONS
     console.log("[PARENT] fetchData method ran");
     axios.get(this.state.apiUrl).then((response) => {
+      console.log(response);
       this.setState({
         dataPackage: response.data.results,
         fetched: true,
@@ -44,12 +48,27 @@ class Game extends Component {
     });
   };
 
+  decoderFunc = (myInfo) => {
+    let transformed = myInfo.toString().replace(/&quot;/g, `"`).replace(/&#039;/g, `'`).replace(/&pi;/g, `π`);
+    return transformed;
+  } 
+
   showQuestion = () => {
     console.log("[PARENT] showQuestion method ran");
 
     if (this.state.dataIndex < this.state.dataPackage.length) {                           // check if we are within our question array
+     
+      // let encodedString = art.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+      //   return '&#' + i.charCodeAt(0) + ';';
+      // });
+      
+      // const strToDecode = 'Environment &amp; Forest';
+
+      
+
+
       this.setState({
-        currentQuestion: this.state.dataPackage[this.state.dataIndex].question,
+        currentQuestion: this.decoderFunc(this.state.dataPackage[this.state.dataIndex].question),
         correctAnswer: this.state.dataPackage[this.state.dataIndex]
           .correct_answer,
         incorrectAnswers: this.state.dataPackage[this.state.dataIndex]
@@ -101,7 +120,7 @@ class Game extends Component {
         return (
           <Answer
             key={answer}
-            versi={answer}
+            versi={this.decoderFunc(answer)}
             clicked={() => {
               console.log("[PARENT] clicked props at work");
               this.compareAnswer(answer);                               // on click we call compareAnswer method to change scores!
@@ -126,11 +145,12 @@ class Game extends Component {
     let mainQuestion = (                                                      // rendering questionMenu before populating the state!
       <QuestionMenu onChange={this.dynamicUrlHandler.bind(this)} />       // props onChange triggers our child component logic!!!!
     ); 
-
+    
     if (this.state.dataPackage) {
                                                                                    
       mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />;        // if we do have a datapackage - show current question
     }
+   
 
     // {this.state.gameOver ? styles.header.headerGameOver : styles.header}
      // conditional application of our styles to score block!
@@ -154,6 +174,8 @@ class Game extends Component {
           ></Scores>
       </div>
       }
+
+      // if (this.state.currentQuestion[])
     return (
       <section className={styles.triviaGame}>
         <div className={styles.container}>
