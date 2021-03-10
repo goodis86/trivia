@@ -3,6 +3,7 @@ import "./questionMenu.css";
 import "../../components/mainQ/mainQ.css";
 
 import Button from "../../components/Button";
+import '../mainQ/mainQ.css';
 
                                                                         // this component rerenders and shows us our option chosen!!
                                                                         // it does not trigger rerender of our game component!!!!
@@ -119,7 +120,7 @@ class QuestionMenu extends Component {
       <div className="main">
         <form className="game-question">
                                                                        {/* each select gets onChange prop and name prop to manipulate and update data in our state*/}
-          <select onChange={this.userChoiseHandler} name="category">    {/*and use only 1 method to update state*/}
+          <select className='select' onChange={this.userChoiseHandler} name="category">    {/*and use only 1 method to update state*/}
             {category.map((
               option                                                                // mapping through our arrays and rendering options!
             ) => (
@@ -128,21 +129,21 @@ class QuestionMenu extends Component {
               </option>
             ))}
           </select>
-          <select onChange={this.userChoiseHandler} name="difficulty">
+          <select className='select' onChange={this.userChoiseHandler} name="difficulty">
             {difficultyLevel.map((option) => (
               <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select onChange={this.userChoiseHandler} name="questionAmount">
+          <select className='select' onChange={this.userChoiseHandler} name="questionAmount">
             {questionAmount.map((option) => (
               <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select onChange={this.userChoiseHandler} name="gameType">
+          <select className='select' onChange={this.userChoiseHandler} name="gameType">
             {gameType.map((option) => (
               <option key={option.label} value={option.value}>
                 {option.label}

@@ -9,12 +9,14 @@ class App extends Component {
     console.log('[APP component] rendered ');
     return (
       (
+        <div className = "container">
         <Layout >
           <Game>
             
           </Game>
           </Layout>
-      )
+          </div>
+          )
     );
   }
 }
