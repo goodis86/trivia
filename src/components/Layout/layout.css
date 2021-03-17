@@ -1,12 +1,50 @@
+
+/* default screen sizes are 1025px and wider! */
+
 .content {
-   
-     margin-top: 5%;
-     margin-left: 10%;
-     margin-right: 10%; 
- margin-bottom: 10% ;
- /* max-height: 800px; */
+  margin-top: 5%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 10%;
 }
 
 .mainContainer {
+  background: url(../../images/dirty-pattern-paint-room-block_1203-5709.jpg);
+}
+
+@media (max-width: 1024px) {
+  .content {
+    margin-top: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 10%;
+  }
+
+  .mainContainer {
     background: url(../../images/dirty-pattern-paint-room-block_1203-5709.jpg);
+  }
+}
+@media (max-width: 768px) {
+  .content {
+    margin-top: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 10%;
+  }
+
+  .mainContainer {
+    background: url(../../images/dirty-pattern-paint-room-block_1203-5709.jpg);
+  }
+}
+@media (max-width: 480px) {
+  .content {
+    margin-top: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 10%;
+  }
+
+  .mainContainer {
+    background: url(../../images/dirty-pattern-paint-room-block_1203-5709.jpg);
+  }
 }

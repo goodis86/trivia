@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import "./questionMenu.css";
-import "../../components/mainQ/mainQ.css";
-
 import Button from "../../components/Button";
-import '../mainQ/mainQ.css';
 
-                                                                        // this component rerenders and shows us our option chosen!!
-                                                                        // it does not trigger rerender of our game component!!!!
+import "./questionMenu.css";
+
+// this component rerenders and shows us our option chosen!!
+// it does not trigger rerender of our game component!!!!
 
 const category = [
   {
@@ -95,17 +93,17 @@ class QuestionMenu extends Component {
   }
 
   userChoiseHandler(event) {
-    this.setState({ [event.target.name]: event.target.value });                   // implemented our method to alter needed state values depending on type of select items!!!!!
+    this.setState({ [event.target.name]: event.target.value }); // implemented our method to alter needed state values depending on type of select items!!!!!
   }
   dynamicUrl() {
     console.log("[CHILD] QuestionMenu - dynamic url is created:");
     let apiUrl = `https://opentdb.com/api.php?amount=${this.state.questionAmount}&category=${this.state.category}&difficulty=${this.state.difficulty}&type=${this.state.gameType}`;
-    this.props.onChange(apiUrl);                                                // onChange prop is initiated and passes our dynamically created url to our parent through props!!!!
+    this.props.onChange(apiUrl); // onChange prop is initiated and passes our dynamically created url to our parent through props!!!!
   }
 
   render() {
     console.log("[CHILD] QuestionMenu rendered");
-    let loadButton = <div />;                                               // load questions button rendering and logic!
+    let loadButton = <div />; // load questions button rendering and logic!
 
     if (
       this.state.category &&
@@ -113,37 +111,55 @@ class QuestionMenu extends Component {
       this.state.difficulty &&
       this.state.gameType
     ) {
-      loadButton = <Button click={this.dynamicUrl} />;                      // run dynamicUrl method on our button click! - which passes our url to parent right away!
+      loadButton = <Button click={this.dynamicUrl} />; // run dynamicUrl method on our button click! - which passes our url to parent right away!
     }
 
     return (
-      <div className="main">
-        <form className="game-question">
-                                                                       {/* each select gets onChange prop and name prop to manipulate and update data in our state*/}
-          <select className='select' onChange={this.userChoiseHandler} name="category">    {/*and use only 1 method to update state*/}
+      <div className="quesitonMenu">
+        <form>
+          {/* each select gets onChange prop and name prop to manipulate and update data in our state*/}
+          <select
+            className="select"
+            onChange={this.userChoiseHandler}
+            name="category"
+          >
+            {" "}
+            {/*and use only 1 method to update state*/}
             {category.map((
-              option                                                                // mapping through our arrays and rendering options!
+              option // mapping through our arrays and rendering options!
             ) => (
               <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select className='select' onChange={this.userChoiseHandler} name="difficulty">
+          <select
+            className="select"
+            onChange={this.userChoiseHandler}
+            name="difficulty"
+          >
             {difficultyLevel.map((option) => (
               <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select className='select' onChange={this.userChoiseHandler} name="questionAmount">
+          <select
+            className="select"
+            onChange={this.userChoiseHandler}
+            name="questionAmount"
+          >
             {questionAmount.map((option) => (
               <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          <select className='select' onChange={this.userChoiseHandler} name="gameType">
+          <select
+            className="select"
+            onChange={this.userChoiseHandler}
+            name="gameType"
+          >
             {gameType.map((option) => (
               <option key={option.label} value={option.value}>
                 {option.label}

@@ -3,7 +3,7 @@ import axios from "axios";
 // import iconv from 'iconv-lite';
 
 import styles from "./game.module.css";
-import "./game.css";
+// import "./game.css";
 
 import Scores from "../../components/scores/scores";
 import MainQ from "../../components/mainQ/mainQ";
@@ -57,16 +57,6 @@ class Game extends Component {
     console.log("[PARENT] showQuestion method ran");
 
     if (this.state.dataIndex < this.state.dataPackage.length) {                           // check if we are within our question array
-     
-      // let encodedString = art.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-      //   return '&#' + i.charCodeAt(0) + ';';
-      // });
-      
-      // const strToDecode = 'Environment &amp; Forest';
-
-      
-
-
       this.setState({
         currentQuestion: this.decoderFunc(this.state.dataPackage[this.state.dataIndex].question),
         correctAnswer: this.state.dataPackage[this.state.dataIndex]
@@ -109,11 +99,22 @@ class Game extends Component {
       return <Spinner />;                                         // SHOW SPINNER IF LOADING!
     }
 
-    let answers = this.state.incorrectAnswers                     // array of shuffled answers
+    let mainQuestion = (                                                      // rendering questionMenu before populating the state!
+      <QuestionMenu onChange={this.dynamicUrlHandler.bind(this)} />       // props onChange triggers our child component logic!!!!
+    ); 
+    
+    let timer = <div />;
+    let options = <div />;
+    let scores = <div />;
+
+
+    if (this.state.dataPackage) {
+                                                                                   
+      mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />;        // if we do have a datapackage - show current question
+      let answers = this.state.incorrectAnswers                     // array of shuffled answers
       .concat(this.state.correctAnswer)
       .sort(() => 0.5 - Math.random());
-    let timer = <div />;
-    let options = null;
+    
     if (this.state.currentQuestion) {
                                                                 // answer buttons rendering on screen!!
       options = answers.map((answer) => {
@@ -128,45 +129,33 @@ class Game extends Component {
             }}
           ></Answer>
         );
-      });
-
-      timer = (
-        <Timer
-          onTimeOut={() => {                                                  // OUR ONTIMEOUT PROPS ARE RECEIVED FROM CHILD AND WE TRIGGER OUR METHODS HERE !
-            console.log("[CHILD] Timer ontimeOut prop initiated]");
-            this.compareAnswer("null");
-            this.showQuestion();
-          }}
-          timerReset={this.state.dataIndex}                   // we set our props to dataIndex(changes with every question), allows us to avoid infinite loop in timer component!
-        />
-      ); 
+      })
     }
 
-    let mainQuestion = (                                                      // rendering questionMenu before populating the state!
-      <QuestionMenu onChange={this.dynamicUrlHandler.bind(this)} />       // props onChange triggers our child component logic!!!!
+
+    timer = (
+      <Timer
+        onTimeOut={() => {                                                  // OUR ONTIMEOUT PROPS ARE RECEIVED FROM CHILD AND WE TRIGGER OUR METHODS HERE !
+          console.log("[CHILD] Timer ontimeOut prop initiated]");
+          this.compareAnswer("null");
+          this.showQuestion();
+        }}
+        timerReset={this.state.dataIndex}                   // we set our props to dataIndex(changes with every question), allows us to avoid infinite loop in timer component!
+      />
     ); 
-    
-    if (this.state.dataPackage) {
-                                                                                   
-      mainQuestion = <MainQ currentQuestion={this.state.currentQuestion} />;        // if we do have a datapackage - show current question
-    }
+    scores =  <Scores
+                      correctStats={this.state.correctStats}
+                      incorrectStats={this.state.incorrectStats}
+                      skipped={this.state.skipped} />
+  }
    
-
-    // {this.state.gameOver ? styles.header.headerGameOver : styles.header}
-     // conditional application of our styles to score block!
-    let scores =  <div className='header' >   
-    <Scores
-      correctStats={this.state.correctStats}
-      incorrectStats={this.state.incorrectStats}
-      skipped={this.state.skipped}
-      ></Scores>
-  </div>
+  
 
       if (this.state.gameOver) {
         mainQuestion = <MainQ currentQuestion="GAME OVER"></MainQ>;                   // if game over - WE CAN ANIMATE OUR RESULTS! - DO SOME VISUAL AIDS!
-        options = null;                                                               // don't render my answer options when game over
+        options = <div/>;                                                               // don't render my answer options when game over
         timer = <div />;                                                              // don't show timer if game over!
-        scores = <div className='header headerGameOver'>
+        scores = <div className= {`${styles.header} ${styles.headerGameOver}`}> 
         <Scores
           correctStats={this.state.correctStats}
           incorrectStats={this.state.incorrectStats}
@@ -179,12 +168,15 @@ class Game extends Component {
     return (
       <section className={styles.triviaGame}>
         <div className={styles.container}>
-        {scores}
+        
+          {scores}
+         
           {mainQuestion}
-          <div className={styles.answers}>
-            {options}
-            {timer}
-          </div>
+         
+          {options}
+         
+          {timer}
+        
         </div>
       </section>
     );

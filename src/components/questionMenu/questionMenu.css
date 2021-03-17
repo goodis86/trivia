@@ -1,0 +1,23 @@
+.questionMenu {
+    /* background-color: #fffeee; */
+    flex-basis: 100%;
+    /* text-align: center; */
+    /* min-height: 25vh ; */
+    width: 80%;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    /* margin-top: -20px; */
+  }
+  
+  .game-question {
+    font-size: large;
+    font-family: "Courier New", Courier, monospace;
+    display: grid;
+    width: 80%;
+    text-align: center;
+  }
+  
+  .select {
+    text-align-last: center;
+  }

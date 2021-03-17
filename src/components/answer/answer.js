@@ -3,9 +3,12 @@ import "./answer.css";
 
 const answer = (props) => {
   return (
-    <button 
-    className="answer" 
-    onClick={props.clicked}>{props.versi}</button>
+    <div className = 'answers'>
+      <button 
+      className="answer" 
+      onClick={props.clicked}>{props.versi}</button>
+
+    </div>
   );
 };
 
